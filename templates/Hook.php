@@ -2,7 +2,7 @@
 
 namespace AppNameSpace;
 
-use \Essentials\Abstracts\Hooks;
+use \Scaffold\Essentials\Abstracts\Hooks;
 
 final class ClassName extends Hooks {
 
