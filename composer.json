@@ -1,0 +1,18 @@
+{
+  "name": "chrillaz/scaffold-cli",
+  "type": "package",
+  "description": "Cli for tamplateing files within Scaffold theme",
+  "homepage": "https://github.com/Chrillaz/scaffold-cli",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Christoffer Öhman",
+      "email": "totalchriz@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Scaffold\\Cli\\": "src/"
+    }
+  }
+}
