@@ -43,7 +43,7 @@ final class Console {
 
       $filename = $dir . trim( $name = $args[2] ) . '.php';
 
-      $content = \file_get_contents( __DIR__ . "/templates/$command" . ".php" );
+      $content = \file_get_contents( dirname( __FILE__ ) . "/../templates/$command" . ".php" );
 
       $content = str_replace( 'AppNameSpace', $this->namespace . '\\' . \ucfirst( $command ) . 's', $content );
 
