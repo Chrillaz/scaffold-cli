@@ -2,11 +2,18 @@
 
 namespace Scaffold\Cli;
 
+use Scaffold\Cli\{
+  Option,
+  Block,
+  Hook,
+};
+
 final class Console {
 
   protected $commands = [
     'hook',
-    'option'
+    'option',
+    'block'
   ];
 
   protected $namespace;
@@ -15,7 +22,7 @@ final class Console {
 
   public function __construct ( $namespace, $basepath ) {
     
-    $this->namespace = $namespace;
+    $this->namespace = ltrim( $namespace, '\\' );
 
     $this->basepath = $basepath;
   }
@@ -24,7 +31,7 @@ final class Console {
 
     if ( ! \in_array( $command, $this->commands ) ) {
 
-      echo "ERROR: Command \"$command\" not found.";
+      echo "ERROR: Command \"$command\" not found. \n\n";
 
       exit;
     }
@@ -32,36 +39,50 @@ final class Console {
     return $command;
   }
 
-  protected function make ( string $command, array $args ) {
+  protected function make ( Fs $fs ) {
 
-    if ( isset( $args[2] ) ) {
-      
-      if ( ! \file_exists( $dir = $this->basepath . \ucfirst( '/' . $command . 's/' ) ) ) {
+    if ( ! $fs->exists() ) {
 
-        $dir = \mkdir( $dir );
-      }
+      $fs->create();
 
-      $filename = $dir . trim( $name = $args[2] ) . '.php';
-
-      $content = \file_get_contents( dirname( __FILE__ ) . "/../templates/$command" . ".php" );
-
-      $content = str_replace( 'AppNameSpace', $this->namespace . '\\' . \ucfirst( $command ) . 's', $content );
-
-      $content = str_replace( 'ClassName', $name, $content );
-
-      \file_put_contents( $filename, $content );
-
-      echo $name . " created. \n\n";
+      $fs->write();
     }
-
-    exit;
   }
 
   public function runCommand ( array $args ) {
 
     if ( isset( $args[1] ) && $command = $this->getCommand( $args[1] ) ) {
 
-      $this->make( $command, $args );
+      $filename = $args[2];
+
+      $template = NULL;
+
+      switch ( $command ) {
+
+        case 'hook':
+
+          $template = new Hook( $command, $filename, $this->basepath, $this->namespace );
+          break;
+        
+        case 'option':
+
+          $template = new Option( $command, $filename, $this->basepath, $this->namespace );
+          break;
+
+        case 'block':
+
+          $template = new Block( $command, $filename, $this->basepath );
+          break;
+        
+        default:
+          echo "\n\n \"$command\" $filename already exists \n\n";
+      }
+
+      $this->make( new Fs( $template ) );
+      
+      echo "\n\n Yeey! \"$command\" $filename created.\n\n";
+      
+      exit;
     }
   }
 }
