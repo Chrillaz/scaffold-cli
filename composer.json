@@ -1,5 +1,5 @@
 {
-    "name": "scaffold/wordpress-cli",
+    "name": "chrillaz/scaffold-cli",
     "type": "package",
     "description": "Cli for templateing files within Scaffold Theme",
     "homepage": "https://github.com/Chrillaz/scaffold-cli",
